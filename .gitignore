@@ -131,11 +131,14 @@ dmypy.json
 ## Ignore JetBrains IDEs files
 
 # User-specific stuff
+**/.idea/**/misc.xml
 **/.idea/**/workspace.xml
 **/.idea/**/tasks.xml
 **/.idea/**/usage.statistics.xml
 **/.idea/**/dictionaries
 **/.idea/**/shelf
+**/.idea/**/codeStyles/
+**/.idea/**/inspectionProfiles/
 
 # Generated files
 **/.idea/**/*.iml
