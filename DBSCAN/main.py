@@ -72,7 +72,7 @@ def set_and_launch_pygame_display():
 
 def run_dbscan(points, r, neighbours_number=3, visualize_on=True):
     flagged_points = assign_flag_to_points(points, r, neighbours_number)
-    clusters = group_points()
+    clusters = group_points(flagged_points, r)
     if visualize_on:
         draw_flagged_points(points, flagged_points)
         draw_clusters(clusters)
@@ -133,22 +133,24 @@ def assign_flag_to_points(points, r, minimum_neighbours_number):
     return flagged_points
 
 
-def group_points(flagged_points, r, minimum_neighbour_number):
-    sample = set(filter(
-        lambda point: point[1] == "green", flagged_points))
+def group_points(flagged_points, r):
+    sample = set(map(
+        lambda point: point[0],
+        filter(lambda point: point[1] == "green", flagged_points)))
     clusters = []
     while len(sample) != 0:
         current_point = sample.pop()
         cluster = {current_point}
         points_to_visit = {current_point}
-        clusters.append(cluster)
         while len(points_to_visit) != 0:
             point_to_visit = points_to_visit.pop()
             neighbours = find_points_neighbours(point_to_visit, flagged_points, r)
             cluster = cluster.union(neighbours)
             neighbours_that_belongs_sample = return_neighbours_that_belongs_sample(neighbours, sample)
             sample = sample - neighbours_that_belongs_sample
-            point_to_visit = points_to_visit.union(neighbours_that_belongs_sample)
+            points_to_visit = points_to_visit.union(neighbours_that_belongs_sample)
+
+        clusters.append(cluster)
 
     return clusters
 
@@ -160,7 +162,7 @@ def find_points_neighbours(root_point, flagged_points, r):
         if flagged_point_flag == 'green' or 'yellow':
             distance = get_distance(root_point, flagged_point_coordinate)
             if distance < r:
-                neighbours.add(flagged_points)
+                neighbours.add(flagged_point_coordinate)
 
     return neighbours
 
