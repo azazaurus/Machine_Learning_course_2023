@@ -74,7 +74,7 @@ def run_dbscan(points, r, neighbours_number=3, visualize_on=True):
     flagged_points = assign_flag_to_points(points, r, neighbours_number)
     clusters = group_points(flagged_points, r)
     if visualize_on:
-        draw_flagged_points(points, flagged_points)
+        draw_flagged_points(flagged_points)
         draw_clusters(clusters)
 
 
@@ -208,26 +208,28 @@ def draw_clusters(clusters):
     screen = pygame.display.set_mode((600, 400), pygame.RESIZABLE)
     screen.fill('white')
     pygame.display.update()
-    clusters_color = get_clusters_color()
-    for cluster, cluster_color in zip(clusters, clusters_color):
+    window_closed = False
+    while not window_closed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                window_closed = True
                 break
             if event.type == pygame.WINDOWEXPOSED:
                 screen.fill('white')
-                for cluster_point in cluster:
-                    pygame.draw.circle(screen,
-                                       color=cluster_color, center=cluster_point,
-                                       radius=point_radius)
+                for cluster, cluster_number in zip(clusters, range(len(clusters))):
+                    cluster_color = get_clusters_color(cluster_number)
+                    for cluster_point in cluster:
+                        pygame.draw.circle(screen,
+                                           color=cluster_color,
+                                           center=cluster_point,
+                                           radius=point_radius)
 
             pygame.display.update()
 
 
-def get_clusters_color(clusters_number):
-    
-    for
-    return NotImplementedError
+def get_clusters_color(cluster_number):
+    return random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
 
 
 def start():
