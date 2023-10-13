@@ -130,33 +130,7 @@ dmypy.json
 
 ## Ignore JetBrains IDEs files
 
-# User-specific stuff
-**/.idea/**/misc.xml
-**/.idea/**/workspace.xml
-**/.idea/**/tasks.xml
-**/.idea/**/usage.statistics.xml
-**/.idea/**/dictionaries
-**/.idea/**/shelf
-**/.idea/**/codeStyles/
-**/.idea/**/inspectionProfiles/
-
-# Generated files
-**/.idea/**/*.iml
-**/.idea/**/vcs.xml
-**/.idea/**/contentModel.xml
-
-# Sensitive or high-churn files
-**/.idea/**/dataSources.xml
-**/.idea/**/dataSources/
-**/.idea/**/dataSources.ids
-**/.idea/**/dataSources.local.xml
-**/.idea/**/sqlDataSources.xml
-**/.idea/**/dynamic.xml
-**/.idea/**/uiDesigner.xml
-**/.idea/**/dbnavigator.xml
-
-# Mongo Explorer plugin
-**/.idea/**/mongoSettings.xml
+**/.idea/
 
 # File-based project format
 *.iws
@@ -166,9 +140,3 @@ dmypy.json
 
 # JIRA plugin
 atlassian-ide-plugin.xml
-
-# Cursive Clojure plugin
-**/.idea/replstate.xml
-
-# Editor-based Rest Client
-**/.idea/httpRequests
