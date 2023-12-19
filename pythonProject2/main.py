@@ -15,7 +15,8 @@ from keras.utils import to_categorical
 
 
 def main():
-    model = run_test_harness()
+    # model = run_test_harness()
+    model = keras.models.load_model('digit_model.h5')
     print(predict(model, "-12.png"))
 
 
@@ -23,6 +24,12 @@ def main():
 def load_dataset():
     # load dataset
     (trainX, trainY), (testX, testY) = mnist.load_data()
+    minuses = [cv2.imread(minus_path, cv2.IMREAD_GRAYSCALE) for minus_path in ["minus (1).png", "minus (2).png", "minus (3).png", "minus (4).png", "minus (5).png", "minus (6).png", "minus (7).png", "minus (8).png"]] * 600
+    minuses_test = [cv2.imread(minus_path, cv2.IMREAD_GRAYSCALE) for minus_path in ["minus (1).png", "minus (2).png", "minus (3).png", "minus (4).png", "minus (5).png", "minus (6).png", "minus (7).png", "minus (8).png"]] * 100
+    trainX = np.concatenate((trainX, minuses), axis=0)
+    trainY = np.concatenate((trainY, np.array([10] * len(minuses))), axis = 0)
+    testX = np.concatenate((testX, minuses_test), axis=0)
+    testY = np.concatenate((testY, np.array([10] * len(minuses_test))), axis = 0)
     # reshape dataset to have a single channel
     trainX = trainX.reshape((trainX.shape[0], 28, 28, 1))
     testX = testX.reshape((testX.shape[0], 28, 28, 1))
@@ -54,7 +61,7 @@ def define_model():
     model.add(MaxPooling2D((2, 2)))
     model.add(Flatten())
     model.add(Dense(100, activation='relu', kernel_initializer='he_uniform'))
-    model.add(Dense(10, activation='softmax'))
+    model.add(Dense(11, activation='softmax'))
     # compile model
     opt = SGD(learning_rate=0.01, momentum=0.9)
     model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
@@ -70,9 +77,9 @@ def run_test_harness():
     # define model
     model = define_model()
     # fit model
-    # model.fit(trainX, trainY, epochs=10, batch_size=32, verbose=1)
+    model.fit(trainX, trainY, epochs=10, batch_size=32, verbose=1)
     # # save model
-    # model.save('digit_model.h5')
+    model.save('digit_model.h5')
     model = keras.models.load_model('digit_model.h5')
     _, acc = model.evaluate(testX, testY, verbose=0)
     print('> %.3f' % (acc * 100.0))
@@ -213,9 +220,13 @@ def predict(model, image: str):
     result = ""
 
     for i in range(len(letters)):
-        result += rec_digit(letters[i][2], model)
+        digit = rec_digit(letters[i][2], model)
+        if digit == 10:
+            result += "-"
+        else:
+            result += digit
 
-    return int(result)
+    return result
 
 
 if __name__ == "__main__":
