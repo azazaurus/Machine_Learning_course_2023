@@ -1,3 +1,4 @@
+import glob
 import math
 
 import cv2
@@ -24,10 +25,11 @@ def main():
 def load_dataset():
     # load dataset
     (trainX, trainY), (testX, testY) = mnist.load_data()
-    minuses = [cv2.imread(minus_path, cv2.IMREAD_GRAYSCALE) for minus_path in ["minus (1).png", "minus (2).png", "minus (3).png", "minus (4).png", "minus (5).png", "minus (6).png", "minus (7).png", "minus (8).png"]] * 600
-    minuses_test = [cv2.imread(minus_path, cv2.IMREAD_GRAYSCALE) for minus_path in ["minus (1).png", "minus (2).png", "minus (3).png", "minus (4).png", "minus (5).png", "minus (6).png", "minus (7).png", "minus (8).png"]] * 100
-    trainX = np.concatenate((trainX, minuses), axis=0)
-    trainY = np.concatenate((trainY, np.array([10] * len(minuses))), axis = 0)
+    minuses = [cv2.imread(minus_path, cv2.IMREAD_GRAYSCALE) for minus_path in glob.glob("processed/*.png")]
+    minuses_train = minuses
+    trainX = np.concatenate((trainX, minuses_train), axis=0)
+    trainY = np.concatenate((trainY, np.array([10] * len(minuses_train))), axis = 0)
+    minuses_test = minuses
     testX = np.concatenate((testX, minuses_test), axis=0)
     testY = np.concatenate((testY, np.array([10] * len(minuses_test))), axis = 0)
     # reshape dataset to have a single channel
